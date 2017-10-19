@@ -5,6 +5,9 @@
 	"require": {
 		"php": ">=5.2"
 	},
+	"bin": [
+		"bin/phpsimplertest"
+	],
 	"autoload": {
 		"psr-0": {
 			"TOGoS_SimplerTest_": "src/main/php/"
