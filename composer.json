@@ -1,0 +1,18 @@
+{
+	"name": "togos/simpler-test",
+	"description": "A simple unit test framework to support PHPUnit-like tests",
+	"license": "MIT",
+	"require": {
+		"php": ">=5.2"
+	},
+	"autoload": {
+		"psr-0": {
+			"TOGoS_SimplerTest_": "src/main/php/"
+		}
+	},
+	"autoload-dev": {
+		"psr-0": {
+			"TOGoS_SimplerTest_": "src/test/php/"
+		}
+	}
+}

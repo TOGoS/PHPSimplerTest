@@ -1,0 +1,90 @@
+#!/usr/bin/env php
+<?php
+
+ini_set('display_errors','on');
+ini_set('error_reporting', E_ALL|E_STRICT);
+
+$dirs = array();
+$bootstrapFiles = array();
+$outputMode = 'errorsOnly'; // errorsOnly|colorful
+
+for( $i=1; $i<count($argv); ++$i ) {
+	$arg = $argv[$i];
+	switch( $arg ) {
+	case '--colorful-output':
+		$outputMode = 'colorful';
+		break;
+	case '--bootstrap':
+		$bootstrapFiles[] = $argv[++$i];
+		break;
+	default:
+		if( preg_match('/^-/', $arg) ) {
+			fwrite(STDERR, "My hat is bread.  Your argument is invalid: $arg\n");
+			exit(1);
+		}
+		$dirs[] = $arg;
+	}
+}
+
+foreach( $bootstrapFiles as $f ) {
+	require_once $f;
+}
+
+$finder = new TOGoS_SimplerTest_TestFinder();
+$testClassInfos = array();
+foreach( $dirs as $dir ) {
+	$finder->findTestClasses($dir, $testClassInfos);
+}
+
+$overallStats = array(
+	'testCaseCount' => 0,
+	'subCaseCount' => 0,
+	'assertionCount' => 0,
+	'failures' => array(),
+);
+foreach( $testClassInfos as $tci ) {
+	$className = $tci['className'];
+	$testCase = new $className();
+	$stats = $testCase->runTests();
+	$overallStats['testCaseCount'] += 1;
+	$overallStats['assertionCount'] += $stats['assertionCount'];
+	$overallStats['subCaseCount'] += $stats['subCaseCount'];
+	$overallStats['failures'] = array_merge($overallStats['failures'], $stats['failures']);
+}
+
+$okay = count($overallStats['failures']) == 0;
+
+foreach( $overallStats['failures'] as $failure ) {
+	$exception = $failure['exception'];
+	echo "{$failure['className']}#{$failure['methodName']} says:\n";
+	while( $exception ) {
+		$message = str_replace("\n", "\n    ",$exception->getMessage());
+		echo "    {$message}\n";
+		$backtrace = $exception->getTrace();
+		foreach( $backtrace as $item ) {
+			if( isset($item['file']) || isset($item['line']) ) {
+				$f = isset($item['file']) ? $item['file'] : '';
+				$l = isset($item['line']) ? $item['line'] : '';
+				$u = isset($item['function']) ? $item['function'] : '';
+				echo "  " . $f . ($l ? ":{$l}" : '') . ($u ? " in {$u}" : '') . "\n";
+			}
+		}
+		$exception = $exception->getPrevious();
+		if( $exception == null ) break;
+		
+		echo "Caused by...\n";
+	}
+	echo "\n";
+}
+
+switch( $outputMode ) {
+case 'colorful':
+	echo "{$overallStats['testCaseCount']} test cases, {$overallStats['subCaseCount']} sub-cases, {$overallStats['assertionCount']} assertions\n";
+	if( $okay ) {
+		echo "\e[1m\e[32;1mOkay!\e[0m\n";
+	} else {
+		echo "\e[1m\e[31;1mSome tests failed!\e[0m\n";
+	}
+}
+
+exit($okay ? 0 : 1);
