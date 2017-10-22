@@ -35,7 +35,8 @@ class TOGoS_SimplerTest_TestCaseTest extends TOGoS_SimplerTest_TestCase
 		$results = $otherTestCase->runSubTest('testTrivialThing');
 		$this->assertEquals( array(
 			'assertionCount' => 1,
-			'subCaseCount' => 1,
+			'subCases' => array('TOGoS_SimplerTest_TestCaseTestCase#testTrivialThing'),
+			'skippedSubCases' => array(),
 			'failures' => array(),
 		), $results );
 	}
