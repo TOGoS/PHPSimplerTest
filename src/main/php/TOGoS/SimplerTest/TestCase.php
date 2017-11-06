@@ -10,7 +10,7 @@ class TOGoS_SimplerTest_TestCase
 		++$this->assertionCount;
 		if( !$whatever ) {
 			throw new TOGoS_SimplerTest_AssertionFailed(
-				(!empty($message) ? "{$message}: " : "")."Expected true but got ".var_export($whatever));
+				(!empty($message) ? "{$message}: " : "")."Expected true but got ".var_export($whatever, true));
 		}
 	}
 	
@@ -18,7 +18,7 @@ class TOGoS_SimplerTest_TestCase
 		++$this->assertionCount;
 		if( $whatever ) {
 			throw new TOGoS_SimplerTest_AssertionFailed(
-				(!empty($message) ? "{$message}: " : "")."Expected false but got ".var_export($whatever));
+				(!empty($message) ? "{$message}: " : "")."Expected false but got ".var_export($whatever, true));
 		}
 	}
 	
