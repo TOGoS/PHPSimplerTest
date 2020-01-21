@@ -8,7 +8,7 @@ class TOGoS_SimplerTest_TestFinder
 			throw new Exception("Failed to open $file!!!");
 		}
 		while( ($line = fgets($fh)) !== false ) {
-			if( preg_match('/^\s*class\s*(.*Test)\b/',$line,$bif) ) {
+			if( preg_match('/^\s*class\s*(\S*Test)\b/',$line,$bif) ) {
 				$into[$bif[1]] = array(
 					'className' => $bif[1],
 					'filename' => $file,
