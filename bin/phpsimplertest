@@ -10,20 +10,17 @@ $outputMode = 'errorsOnly'; // errorsOnly|colorful
 
 for( $i=1; $i<count($argv); ++$i ) {
 	$arg = $argv[$i];
-	switch( $arg ) {
-	case '--colorful-output':
+	if( $arg == '--colorful-output' ) {
 		$outputMode = 'colorful';
-		break;
-	case '--bootstrap':
+	} else if( $arg == '--bootstrap' ) {
 		$bootstrapFiles[] = $argv[++$i];
-		break;
-	default:
-		if( preg_match('/^-/', $arg) ) {
-			fwrite(STDERR, "My hat is bread.  Your argument is invalid: $arg\n");
-			exit(1);
-		}
-		$dirs[] = $arg;
+	} else if( preg_match('/^--bootstrap=(.*)$/', $arg, $bif) ) {
+		$bootstrapFiles[] = $bif[1];
+	} else if( preg_match('/^-/', $arg) ) {
+		fwrite(STDERR, "My hat is bread.  Your argument is invalid: $arg\n");
+		exit(1);
 	}
+	$dirs[] = $arg;
 }
 
 foreach( $bootstrapFiles as $f ) {
