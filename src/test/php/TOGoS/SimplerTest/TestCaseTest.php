@@ -46,4 +46,18 @@ class TOGoS_SimplerTest_TestCaseTest extends TOGoS_SimplerTest_TestCase
 		$results = $otherTestCase->runSubTest('testExpectUnthrownException');
 		$this->assertEquals( 1, count($results['failures']) );
 	}
+
+	public function testFail() {
+		$this->expectException('TOGoS_SimplerTest_AssertionFailed');
+		$this->fail("test fail");
+	}
+	
+	public function testAssertSameWhenSame() {
+		$this->assertSame(1, 1, "Asserted that int 1 is same as itself");
+	}
+	
+	public function testAssertSameWhenDifferent() {
+		$this->expectException('TOGoS_SimplerTest_AssertionFailed');
+		$this->assertSame("1", 1, "Asserted that string '1' and integer 1 were the same");
+	}
 }

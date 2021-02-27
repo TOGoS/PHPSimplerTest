@@ -6,6 +6,10 @@ class TOGoS_SimplerTest_TestCase
 {
 	protected $assertionCount;
 
+	protected function fail($message) {
+		throw new TOGoS_SimplerTest_AssertionFailed($message);
+	}
+	
 	protected function assertTrue($whatever, $message="something should be true, but wasn't") {
 		++$this->assertionCount;
 		if( !$whatever ) {
@@ -30,7 +34,7 @@ class TOGoS_SimplerTest_TestCase
 				"Expected ".var_export($expected,true)." but got ".var_export($actual, true));
 		}
 	}
-	
+
 	protected function assertNotEquals($expected, $actual, $message='') {
 		++$this->assertionCount;
 		if( $expected == $actual ) {
@@ -40,6 +44,24 @@ class TOGoS_SimplerTest_TestCase
 		}
 	}
 
+	protected function assertSame($expected, $actual, $message='') {
+		++$this->assertionCount;
+		if( $expected !== $actual ) {
+			throw new TOGoS_SimplerTest_AssertionFailed(
+				(!empty($message) ? "{$message}: " : "").
+				var_export($expected,true)." !== ".var_export($actual, true));
+		}
+	}
+
+	protected function assertNotSame($expected, $actual, $message='') {
+		++$this->assertionCount;
+		if( $expected === $actual ) {
+			throw new TOGoS_SimplerTest_AssertionFailed(
+				(!empty($message) ? "{$message}: " : "Oh no these things are equal but we expected them to be different: ").
+				var_export($expected,true)." === ".var_export($actual, true));
+		}
+	}
+	
 	protected function assertNull($whatever, $message='') {
 		++$this->assertionCount;
 		if( $whatever !== null ) {
