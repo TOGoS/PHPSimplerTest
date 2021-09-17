@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Due to the name, this won't get picked up by the test finder.
- * It has some sub-cases that purposely fail, so we can test that failures work.
+ * Due to the name of the class not ending with "Test",
+ * this won't get picked up by the test finder.
+ * It has some sub-cases that purposely fail,
+ * so we can test that failures work.
  */
 class TOGoS_SimplerTest_TestCaseTestCase extends TOGoS_SimplerTest_TestCase
 {

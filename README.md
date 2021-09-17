@@ -8,7 +8,8 @@ Advantage over PHPUnit: No dependencies aside from PHP itself.
 Theoretically works with PHP 5.2,
 though this is no longer demonstrated by Travis CI because they keep breaking things.
 
-Inherit from ```TOGoS_SimplerTest_TestCase```
+Inherit from ```TOGoS_SimplerTest_TestCase```,
+name your test case classes and source files following the [naming rules](#naming-rules),
 and use ```phpsimplertest``` to run your tests from the command-line.
 
 For examples, see PHPSimplerTest's own
@@ -24,6 +25,12 @@ Using composer:
 composer require phpsimplertest=^1.2
 ```
 
+
+## Naming Rules
+
+To be found by TestFinder:
+- test classes must be defined in source files whose names end with "Test.php"
+- test class names must end with "Test"
 
 ## Running
 
