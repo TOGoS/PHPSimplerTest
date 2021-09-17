@@ -4,6 +4,10 @@ Nearly drop-in replacement for PHPUnit, assuming you're only extending TestCase
 and and calling ```assert{True,False,Equals,NotEquals,Null,NotNull}```
 from ```testX``` methods.
 
+Advantage over PHPUnit: No dependencies aside from PHP itself.
+Theoretically works with PHP 5.2,
+though this is no longer demonstrated by Travis CI because they keep breaking things.
+
 Inherit from ```TOGoS_SimplerTest_TestCase```
 and use ```phpsimplertest``` to run your tests from the command-line.
 
