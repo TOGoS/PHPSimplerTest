@@ -11,7 +11,9 @@ though this is no longer demonstrated by Travis CI because they keep breaking th
 Inherit from ```TOGoS_SimplerTest_TestCase```
 and use ```phpsimplertest``` to run your tests from the command-line.
 
-For examples, see PHPSimplerTest's own tests and Makefile.
+For examples, see PHPSimplerTest's own
+[tests](./src/test/php/TOGoS/SimplerTest/) and
+[Makefile](./Makefile).
 
 
 ## Installing
