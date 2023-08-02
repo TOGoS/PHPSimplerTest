@@ -4,32 +4,41 @@
 ini_set('display_errors','on');
 ini_set('error_reporting', E_ALL|E_STRICT);
 
-$dirs = array();
-$bootstrapFiles = array();
-$outputMode = 'errorsOnly'; // errorsOnly|colorful
-
-for( $i=1; $i<count($argv); ++$i ) {
-	$arg = $argv[$i];
-	if( $arg == '--colorful-output' ) {
-		$outputMode = 'colorful';
-	} else if( $arg == '--bootstrap' ) {
-		$bootstrapFiles[] = $argv[++$i];
-	} else if( preg_match('/^--bootstrap=(.*)$/', $arg, $bif) ) {
-		$bootstrapFiles[] = $bif[1];
-	} else if( preg_match('/^-/', $arg) ) {
-		fwrite(STDERR, "My hat is bread.  Your argument is invalid: $arg\n");
-		exit(1);
+function TOGoS_PHPSimplerTest_read_options($argv) {
+	$dirs = array();
+	$bootstrapFiles = array();
+	$outputMode = 'errorsOnly'; // errorsOnly|colorful
+	
+	for( $i=1; $i<count($argv); ++$i ) {
+		$arg = $argv[$i];
+		if( $arg == '--colorful-output' ) {
+			$outputMode = 'colorful';
+		} else if( $arg == '--bootstrap' ) {
+			$bootstrapFiles[] = $argv[++$i];
+		} else if( preg_match('/^--bootstrap=(.*)$/', $arg, $bif) ) {
+			$bootstrapFiles[] = $bif[1];
+		} else if( preg_match('/^-/', $arg) ) {
+			fwrite(STDERR, "My hat is bread.  Your argument is invalid: $arg\n");
+			exit(1);
+		}
+		$dirs[] = $arg;
 	}
-	$dirs[] = $arg;
+	return array(
+		'dirs' => $dirs,
+		'bootstrapFiles' => $bootstrapFiles,
+		'outputMode' => $outputMode,
+	);
 }
 
-foreach( $bootstrapFiles as $f ) {
+$pst_opts = TOGoS_PHPSimplerTest_read_options($argv);
+
+foreach( $pst_opts['bootstrapFiles'] as $f ) {
 	require_once $f;
 }
 
 $finder = new TOGoS_SimplerTest_TestFinder();
 $testClassInfos = array();
-foreach( $dirs as $dir ) {
+foreach( $pst_opts['dirs'] as $dir ) {
 	$finder->findTestClasses($dir, $testClassInfos);
 }
 
@@ -86,7 +95,7 @@ foreach( $overallStats['failures'] as $failure ) {
 	echo "\n";
 }
 
-switch( $outputMode ) {
+switch( $pst_opts['outputMode'] ) {
 case 'colorful':
 	$stuf = array(
 		count($overallStats['testCases'])." test cases",
